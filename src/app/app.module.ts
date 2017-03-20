@@ -50,6 +50,9 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { FormConstantsService } from './_services/form-constants.service';
 
+import { LocationStrategy, HashLocationStrategy} from '@angular/common';
+import { APP_BASE_HREF } from '@angular/common';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -95,7 +98,10 @@ import { FormConstantsService } from './_services/form-constants.service';
                PagerService,
                FormConstantsService,
                AuthService,
-               AuthGuard],
+               AuthGuard,
+               {provide: LocationStrategy, useClass: HashLocationStrategy},
+               //{provide: APP_BASE_HREF, useValue : '/'}
+               ],
 
   bootstrap: [ AppComponent ]
 })

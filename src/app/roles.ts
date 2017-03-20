@@ -1,7 +1,7 @@
 //Constants for roles
 
 export enum AppRoles  {
-  ADMIN,
+  C4SG_ADMIN,
   VOLUNTEER,
   ORGANIZATION
 };

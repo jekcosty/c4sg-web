@@ -7,10 +7,12 @@ import { myConfig }        from './auth.config';
 import { User } from './user/common/user';
 import { UserService } from './user/common/user.service';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/take';
 import { environment } from '../environments/environment';
 import { AppRoles } from './roles';
 
 declare const Auth0Lock: any;
+declare const Auth0: any; // being used for parsing hash 
 
 @Injectable()
 export class AuthService {
@@ -54,7 +56,8 @@ export class AuthService {
         placeholder: "Sign up as a",
         options: [
           {value: "VOLUNTEER", label: "Volunteer User"},
-          {value: "ORGANIZATION", label: "Non-profit User"}
+          {value: "ORGANIZATION", label: "Non-profit User"},
+          {value: "C4SG_ADMIN", label: "Admin User"}
         ],
         prefill: "VOLUNTEER"
       }
@@ -63,9 +66,10 @@ export class AuthService {
 
   // Configure Auth0 with options
   lock = new Auth0Lock(environment.auth_clientID, environment.auth_domain, this.options);
-
+  auth0 = new Auth0({clientID: environment.auth_clientID, domain: environment.auth_domain});
+  
   constructor(private userService: UserService, private router: Router) {    
-    
+
     // set uset profile of already saved profile
     this.userProfile = JSON.parse(localStorage.getItem('profile'));
 
@@ -165,6 +169,9 @@ export class AuthService {
       });
     });
 
+    //check for redirections with hash
+    this.handleRedirectWithHash();
+
     // Function call to show errors
     let llock = this.lock;
     this.lock.on("authorization_error", function(error) {
@@ -175,6 +182,8 @@ export class AuthService {
             text: error.error_description
         }});
     })
+
+    
   }
 
   public login() {
@@ -193,6 +202,7 @@ export class AuthService {
     localStorage.removeItem('id_token');
     localStorage.removeItem('profile');
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('oAuthState');
     localStorage.clear();
     this.router.navigate(['']);
     this.userProfile = undefined;
@@ -276,5 +286,37 @@ export class AuthService {
       }
     } 
     return false; 
+  }
+
+  // Used to handle checking for redirection with hash enabled
+  private handleRedirectWithHash() {
+    //console.log('inside handle redirect');
+    this.router.events.take(1).subscribe(event => {
+      if (/access_token/.test(event.url) || /error/.test(event.url)) {  
+        let authResult = this.auth0.parseHash(window.location.hash);
+        if (authResult && authResult.idToken) {
+          this.lock.emit('authenticated', authResult);
+        }
+
+        if (authResult && authResult.error) {
+          this.lock.emit('authorization_error', authResult);
+        }
+        // Needed to add this to override redirection since angular thinks
+        // it is suppose to go to a route named "access_token" 
+        this.router.navigate(['']);
+      }
+      else if (/roleselect/.test(event.url)) {  
+        let authResult = this.auth0.parseHash(window.location.search);
+        // console.log(window.location.search);
+        // use the window.location.search to extract the query params
+        var urlstring = window.location.search;
+        var stateoffset = urlstring.indexOf('state=');
+        var statestr = urlstring.slice(stateoffset + 6);
+
+          localStorage.setItem('oAuthState', statestr);
+          // console.log('staterole: ' + localStorage.getItem('stateRole'));
+          this.router.navigate(['/roleselect']);
+      }
+    });
   }
 }

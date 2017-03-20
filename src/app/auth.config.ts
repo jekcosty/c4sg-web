@@ -9,6 +9,6 @@ interface AuthConfiguration {
 export const myConfig: AuthConfiguration = {
     //clientID: '332DZAQiUiXAXYYKvzJy6EodylS2rze5',   // DO NOT CHANGE
     //domain: 'c4sg.auth0.com',                       // DO NOT CHANGE
-    bypassRole: false,
-    roleAs: 'VOLUNTEER'
+    bypassRole: true,
+    roleAs: 'NONPROFIT'
 };
