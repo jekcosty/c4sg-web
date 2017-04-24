@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { User } from './user';
 import { environment } from '../../../environments/environment';
 import { Project } from '../../project/common/project';
+import { PageableResult } from '../../pageable.result';
 
 const userUrl = `${environment.backend_url}/api/users`;
 
@@ -19,11 +20,14 @@ export class UserService {
   // Page data always starts at offset zero (0)
   // Only active users are retrieved
   // Returns a JSON object with the data array of Users and totalItems count
-  public getUsers(page: number): Observable<any> {
+  public getUsers(page: number): Observable<PageableResult<User>> {
     const url = userUrl + '/active?page=' + (page - 1) + '&size=10' + '&sort=id,desc&sort=userName,asc';
     return this.http
                .get(url)
-               .map( res => ({data: res.json().content, totalItems: res.json().totalElements}))
+               .map( res => {
+                  return new PageableResult<User>(
+                    res.json().content, res.json().totalElements);
+                  })
                .catch(this.handleError);
   }
 
