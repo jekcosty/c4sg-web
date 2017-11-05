@@ -125,15 +125,6 @@ ul.right.hide-on-med-and-down{
       display: none;
     }
 
-    .profile-img{
-      left: -50px;
-      right: 0;
-      margin: auto;
-      max-width: 35px;
-      position: absolute;
-      top: 25px;
-    }
-
     .nav-link{
       line-height: normal;
       height: 100%;
@@ -167,7 +158,30 @@ ul.right.hide-on-med-and-down{
 }
 
 
+.button-colored{
+    background-color: $secondary-color;
+    color: white;
+    border: none;
+    font-size: 1em;
+    margin-bottom: 5px;
+    padding: 5px 5px;
+}
 
+.button-collapse {
+    float: right;
+}
+.side-nav {
+    //height: auto;
+    background: #F9F9F9;
+    .button-colored {
+        background-color: $secondary-color;
+        color: white;
+        border: none;
+        font-size: 1em; 
+        margin-bottom: 5px;
+    }
+    
+}
 
 //.right a{
     //color: #989898;

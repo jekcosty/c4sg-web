@@ -1,4 +1,4 @@
-<div class="page-title">
+<div class="page-title clearfix">
   <h1>Volunteers</h1>
 </div>
 <div class="container">
@@ -22,7 +22,7 @@
           <div class="row">
             <div class="col s12">
               <div class="section">
-                <h4>Roles</h4>
+                <h4>Categories</h4>
                 <div class="section-body-projects">
                   <div class="project-list">
                     <ul *ngIf="jobTitles" formArrayName="jobTitles">
@@ -71,7 +71,10 @@
                     <div class="card-info">
                       <div class="card-header">
                         <div class='name'>
-                          <span class='name' [routerLink]="['/user/view',user.id]">{{user.firstName + ' ' + user.lastName}}</span>
+                       <!--   <span class='name' [routerLink]="['/user/view',user.id]">{{user.firstName + ' ' + user.lastName}}</span>-->
+                       <a class='name' href="user/view/{{user.id}}">
+                        {{user.firstName + ' ' + user.lastName}}</a>
+
                         </div>
                         <div class="row">
                           <div class="card-metainfo col m6">
@@ -90,7 +93,7 @@
                           <li class="chip" *ngFor="let skill of user.skills">{{ skill }}</li>
                         </ul>
                       </div>
-                      <p class="description" *ngIf="user && user.introduction">{{ slice(user && user.introduction) }}...</p>
+                      <p class="description text-overflow" *ngIf="user && user.introduction">{{ user && user.introduction }}</p>
                     </div>
                   </div>
                 </div>

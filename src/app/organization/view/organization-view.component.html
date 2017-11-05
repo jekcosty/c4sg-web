@@ -1,5 +1,6 @@
-<div class="page-title">
+<div class="page-title clearfix">
   <h1>Organization</h1>
+  <button class="btn" (click)="goBack()"><i class="mdi mdi-arrow-left-drop-circle-outline left"></i>Back to Search Results</button>
 </div>
 <div class="container">
   <div class="row main-row">
@@ -50,7 +51,10 @@
           <div class="col m12">
             <br>
             <div class="info-title">Introduction</div>
-            <div class="info-description">{{ organization.description }}</div>
+            <div>
+                <pre class="info-description">{{ organization.description }}
+                  </pre>
+                </div>
           </div>
           <div class="col m12">
             <div class="col s12 action-btns">
@@ -68,8 +72,9 @@
     <div class="col m4" id="right-col">
       <div class="sidebar">
         <div class="section" *ngIf="projects">
-          <h4>Contact</h4>
-          <div class="section-body-organization">
+
+          <div class="section-body-organization" *ngIf="authService.authenticated()">
+            <h4>Contact</h4>
             <div class="card">
               <div class="card-content">
                 <div class="row single-info" *ngIf="user">

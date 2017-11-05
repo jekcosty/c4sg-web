@@ -23,11 +23,11 @@
     position: relative;
     display: inline-block;
     overflow: hidden;
-    left: 15%;
+    left: 5%;
     margin-top: 10%;
     top: 12%;
     width: 70%;
-    max-width: 115px;
+    max-width: 100px;
     border-radius: 3px;
     &:before {
       content: "";
@@ -131,5 +131,11 @@
     display: inline-block;
     width: 100%;
     border-bottom: $border-width $border-color solid;
+  }
+}
+
+#right-col {
+  .collapsible-body p {
+    padding: 0;
   }
 }
